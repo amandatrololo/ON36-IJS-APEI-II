@@ -5,11 +5,11 @@ export class CriarRelatorioProgressoDto {
 
   @IsString()
   @ApiProperty({ description: 'Usuário que está preenchendo o relatório' })
-  usuario?: string; // Marcado como opcional no DTO
+  usuario?: string; 
 
   @IsNotEmpty()
   @ApiProperty({ description: 'ID do aluno para o qual o relatório está sendo gerado' })
-  alunoId: string;
+  alunoId: number;
 
   @IsString()
   @IsNotEmpty()
@@ -17,12 +17,12 @@ export class CriarRelatorioProgressoDto {
   progresso: string;
 
   @IsString()
-  @IsNotEmpty() // Mantido como obrigatório
+  @IsNotEmpty() 
   @ApiProperty({ description: 'Dificuldades encontradas pelo aluno' })
-  dificuldades: string; // Removi o `?` para deixar obrigatório
+  dificuldades: string;
 
   @IsString()
   @IsOptional()
   @ApiProperty({ description: 'Sugestões de melhoria para o aluno' })
-  sugestoes?: string; // Este campo é opcional
+  sugestoes?: string; 
 }

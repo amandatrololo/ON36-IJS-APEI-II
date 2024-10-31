@@ -1,16 +1,20 @@
-version: '3.8'
-
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: apei-app
+      args:
+        NODE_ENV: production
     environment:
-      - NODE_ENV=production
+      NODE_ENV: production
+      DB_HOST: 3.15.162.194
+      DB_PORT: 5432
+      DB_USER: apei_user
+      DB_PASSWORD: escolainclusao
+      DB_DATABASE: apei_database-prd
+      JWT_SECRET_HML: c00rd3n4c40secr3t43sc0l4
+      PORT: 3000
     ports:
       - "3000:3000"
     volumes:
       - .:/app
-    command: npm run start:prod
-

@@ -2,7 +2,7 @@ import { Controller, Post, Get, Param, Body, UseGuards } from '@nestjs/common';
 import { AlunoService } from '../../application/services/aluno.service';
 import { CriarAlunoDto } from '../../application/dtos/criar-aluno.dto';
 import { ApiTags , ApiBearerAuth } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../../auth/jwt.guard';
+import { RolesGuard } from '../../auth/jwt.guard';
 
 
 @ApiTags('alunos')
@@ -11,14 +11,14 @@ import { JwtAuthGuard } from '../../auth/jwt.guard';
 export class AlunoController {
   constructor(private readonly alunoService: AlunoService) {}
 
-  @UseGuards(JwtAuthGuard) // Aplica o Guard que valida o JWT  
+  @UseGuards(RolesGuard) // Aplica o Guard que valida o JWT  
   @Post('criar')
   async criarAluno(@Body() criarAlunoDto: CriarAlunoDto) {
    return this.alunoService.criarAluno(criarAlunoDto);
   }
 
   @Get(':id')
-  async buscarAluno(@Param('id') id: string) {
+  async buscarAluno(@Param('id') id: number) {
     return this.alunoService.buscarPorId(id);
   }
 

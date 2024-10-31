@@ -10,15 +10,15 @@ export class RelatorioProfissionalRepository implements RelatorioProfissionalRep
     @InjectRepository(RelatorioProfissional)
     private readonly relatorioProfissionalRepository: Repository<RelatorioProfissional>,
   ) {}
-    buscarPorId(id: string): Promise<RelatorioProfissional | undefined> {
-        throw new Error('Method not implemented.');
+    buscarPorId(id: number): Promise<RelatorioProfissional | undefined> {
+        throw new Error('Relatório não encontrado.');
     }
 
   async salvar(relatorio: RelatorioProfissional): Promise<RelatorioProfissional> {
     return this.relatorioProfissionalRepository.save(relatorio);
   }
 
-  async buscarPorAlunoId(alunoId: string): Promise<RelatorioProfissional[]> {
+  async buscarPorAlunoId(alunoId: number): Promise<RelatorioProfissional[]> {
     return this.relatorioProfissionalRepository.find({ where: { aluno: { id: alunoId } } });
   }
 }

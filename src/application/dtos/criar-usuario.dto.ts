@@ -1,20 +1,15 @@
-import { validate , IsString, IsEmail, IsNotEmpty, MinLength, isString  } from 'class-validator';
+import { IsString, IsEmail, IsNotEmpty, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { PrimaryGeneratedColumn } from 'typeorm';
 
 export class CriarUsuarioDto {
-
-
-  @PrimaryGeneratedColumn()
-  id: number;
-
   @IsString()
   @IsNotEmpty()
   @ApiProperty({ description: '[COORDENADOR, PROFESSOR, PROFISSIONAL, PAI]' })
-  role: string;
+  funcao: string;
 
   @IsString()
-  @IsNotEmpty({message: 'Nome não pode ser vazio'})
+  @IsNotEmpty()
   @ApiProperty({ description: 'Nome completo do usuário' })
   nome: string;
 
@@ -24,7 +19,7 @@ export class CriarUsuarioDto {
   email: string;
 
   @IsString()
-  @MinLength(6, {message: 'Senha deve ter no mínimo 6 caracteres'})
+  @MinLength(6, { message: 'Senha deve ter no mínimo 6 caracteres' })
   @ApiProperty({ description: 'Senha do usuário (mínimo de 6 caracteres)' })
   senha: string;
 }

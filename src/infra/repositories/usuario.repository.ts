@@ -10,6 +10,9 @@ export class UsuarioRepository implements UsuarioRepositoryPort {
     @InjectRepository(Usuario)
     private readonly usuarioRepository: Repository<Usuario>,
   ) {}
+  buscarPorEmail(email: string): Promise<Usuario> {
+    throw new Error('Method not implemented.');
+  }
 
   async salvar(usuario: Usuario): Promise<Usuario> {
     return this.usuarioRepository.save(usuario);

@@ -16,29 +16,52 @@ export class AlunoService {
 
   async criarAluno(dto: CriarAlunoDto): Promise<Aluno> {
     // Verificar se o coordenador existe
-    const coordenador = await this.usuarioRepository.findOne({ where: { id: 19102024 , role: 'COORDENADOR' } })
+    const coordenador = await this.usuarioRepository.findOne({ where: { id: dto.coordenadorId, funcao: 'COORDENADOR' } });
     if (!coordenador) {
       throw new NotFoundException('Coordenador não encontrado');
     }
   
-    // Criar um novo aluno com as informações fornecidas no DTO
+    const professor = await this.usuarioRepository.findOne({ where: { id: dto.professorId, funcao: 'PROFESSOR' } });
+    if (!professor) {
+      throw new NotFoundException('Professor não encontrado');
+    }
+  
+    const profissional = await this.usuarioRepository.findOne({ where: { id: dto.profissionalId, funcao: 'PROFISSIONAL' } });
+    if (!profissional) {
+      throw new NotFoundException('Profissional não encontrado');
+    }
+  
+    const pais = await this.usuarioRepository.findOne({ where: { id: dto.paiId, funcao: 'PAI' } });
+    if (!pais) {
+      throw new NotFoundException('Pais não encontrados');
+    }
+  
+    // Criar um novo aluno
     const novoAluno = this.alunoRepository.create({
-      nome: dto.nome,   // Acessar as propriedades do dto corretamente
-      coordenador: coordenador, // Relaciona o aluno ao coordenador
+      nome: dto.nome,
+      coordenador: coordenador,
+      professor: professor,
+      profissional: profissional,
+      pais: pais
     });
   
-    // Salvar o novo aluno no banco de dados
     return this.alunoRepository.save(novoAluno);
   }
+  
 
-  // Listagem de todos os alunos
+  // Listagem de todos os alunos com as relações associadas
   async listarAlunos(): Promise<Aluno[]> {
-    return await this.alunoRepository.find();
+    return await this.alunoRepository.find({
+      relations: ['coordenador', 'professor', 'profissional', 'pais', 'relatoriosProgresso'],
+    });
   }
 
-  // Buscar um aluno pelo ID
-  async buscarPorId(id: string): Promise<Aluno> {
-    const aluno = await this.alunoRepository.findOne({ where: { id } });
+  // Buscar um aluno pelo ID (id como number)
+  async buscarPorId(id: number): Promise<Aluno> {
+    const aluno = await this.alunoRepository.findOne({
+      where: { id },
+      relations: ['coordenador', 'professor', 'profissional', 'pais', 'relatoriosProgresso'],
+    });
 
     if (!aluno) {
       throw new NotFoundException('Aluno não encontrado.');
@@ -46,17 +69,17 @@ export class AlunoService {
 
     return aluno;
   }
+  
 
-  // Atualizar informações do aluno
-  async atualizarAluno(id: string, atualizarAlunoDto: Partial<CriarAlunoDto>): Promise<Aluno> {
+  // Atualizar informações do aluno (id como number)
+  async atualizarAluno(id: number, atualizarAlunoDto: Partial<CriarAlunoDto>): Promise<Aluno> {
     const aluno = await this.buscarPorId(id);
-
-    Object.assign(aluno, atualizarAlunoDto); // Atualiza as propriedades do aluno
+    Object.assign(aluno, atualizarAlunoDto); 
     return await this.alunoRepository.save(aluno);
   }
 
-  // Deletar aluno
-  async deletarAluno(id: string): Promise<void> {
+  // Deletar aluno (id como number)
+  async deletarAluno(id: number): Promise<void> {
     const aluno = await this.buscarPorId(id);
 
     if (!aluno) {

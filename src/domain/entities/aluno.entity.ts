@@ -1,13 +1,13 @@
 // aluno.entity.ts
-import { Entity, PrimaryColumn, Column, OneToMany , ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany , ManyToOne } from 'typeorm';
 import { RelatorioProgresso } from './relatorio-progresso.entity';
 import { RelatorioProfissional } from './relatorio-profissional.entity';
 import { Usuario } from './usuario.entity';
 
 @Entity('alunos')
 export class Aluno {
-  @PrimaryColumn({ length: 8 })
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column()
   nome: string;
@@ -31,5 +31,5 @@ export class Aluno {
 
   // Relaciona o aluno aos pais
   @ManyToOne(() => Usuario, (usuario) => usuario.filhos, { nullable: false })
-  pais: Usuario[];
+  pais: Usuario;
 }

@@ -15,11 +15,11 @@ export class AlunoRepository implements AlunoRepositoryPort {
     return this.alunoRepository.save(aluno);
   }
 
-  async buscarPorId(id: string): Promise<Aluno | null> {
+  async buscarPorId(id: number): Promise<Aluno | null> {
     return this.alunoRepository.findOne({ where: { id } });
   }
 
-  async deletarAluno(id: string): Promise<void> {
+  async deletarAluno(id: number): Promise<void> {
     const aluno = await this.buscarPorId(id);
     if (aluno) {
       await this.alunoRepository.remove(aluno);

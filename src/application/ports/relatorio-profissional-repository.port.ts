@@ -2,5 +2,5 @@ import { RelatorioProfissional } from '../../domain/entities/relatorio-profissio
 
 export interface RelatorioProfissionalRepositoryPort {
   salvar(relatorio: RelatorioProfissional): Promise<RelatorioProfissional>;
-  buscarPorId(id: string): Promise<RelatorioProfissional | undefined>;
+  buscarPorId(id: number): Promise<RelatorioProfissional | undefined>;
 }

@@ -8,17 +8,17 @@ export class RelatorioProgresso {
   id: number;
 
   @Column()
-  progresso: string; // Avaliação do progresso
+  progresso: string;
 
   @Column()
-  dificuldades: string; // Dificuldades encontradas
+  dificuldades: string;
 
   @Column({ nullable: true })
-  sugestoes: string; // Sugestões opcionais
+  sugestoes: string; 
 
   @ManyToOne(() => Usuario, (usuario) => usuario.relatoriosProgresso)
-  professor: Usuario; // Apenas o professor pode criar e atualizar o relatório
+  professor: Usuario; 
 
   @ManyToOne(() => Aluno, (aluno) => aluno.relatoriosProgresso)
-  aluno: Aluno; // Aluno relacionado ao relatório
+  aluno: Aluno; 
 }

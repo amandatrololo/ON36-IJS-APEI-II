@@ -13,7 +13,6 @@ export class AtualizarUsuarioDto {
   email?: string;
 
   @IsString()
-  @MinLength(6)
   @IsOptional()
   @ApiProperty({ description: 'Nova senha do usuário' })
   senha?: string;

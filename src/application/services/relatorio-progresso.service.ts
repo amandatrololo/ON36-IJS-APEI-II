@@ -34,7 +34,7 @@ export class RelatorioProgressoService {
     return this.relatorioProgressoRepository.save(relatorio);
   }
 
-  async exibirRelatoriosDoAluno(alunoId: string): Promise<RelatorioProgresso[]> {
+  async exibirRelatoriosDoAluno(alunoId: number): Promise<RelatorioProgresso[]> {
     return this.relatorioProgressoRepository.find({ where: { aluno: { id: alunoId } } });
   }
 }

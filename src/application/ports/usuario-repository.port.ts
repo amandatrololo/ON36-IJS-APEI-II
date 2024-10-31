@@ -4,4 +4,5 @@ export interface UsuarioRepositoryPort {
   salvar(usuario: Usuario): Promise<Usuario>;
   buscarPorId(id: number ): Promise<Usuario>;
   deletarUsuario(id: number ): Promise<void>;
+  buscarPorEmail(email: string): Promise<Usuario>;
 }

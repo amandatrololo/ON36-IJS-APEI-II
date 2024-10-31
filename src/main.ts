@@ -3,7 +3,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from '././app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { ValidationPipe } from '@nestjs/common';
-import { Logger } from '@nestjs/common';  // Para logs
+import { Logger } from '@nestjs/common';  // Para logs';
 
 
 async function bootstrap() {
@@ -20,7 +20,8 @@ async function bootstrap() {
     .setTitle('APEI API')
     .setDescription('API para gerenciamento de alunos e relatórios')
     .setVersion('1.0')
-    .addBearerAuth({type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'access-token')  // Suporte para autenticação JWT no Swagger
+    .addBearerAuth({type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'access-token') 
+    .addTag('login') // Suporte para autenticação JWT no Swagger
     .addTag('usuarios')
     .addTag('alunos')
     .addTag('relatorios-progresso')
@@ -32,9 +33,9 @@ async function bootstrap() {
   
   const port = process.env.PORT || 3000;
   await app.listen(port);
-  
+  app.useLogger(['log', 'error', 'warn', 'debug', 'verbose']);
   const logger = new Logger('Bootstrap');
-  logger.log(`Application is running on: http://localhost:${port}`);
+  logger.log(`Aplicação está rodando na: http://localhost:${port}`);
 }
 
 bootstrap();

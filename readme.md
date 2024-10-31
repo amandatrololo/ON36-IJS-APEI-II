@@ -18,7 +18,7 @@ USUARIO {
         string email
         string senha
         string nome
-        string role
+        string funcao
     }
 
     ALUNO {
@@ -133,7 +133,7 @@ DB_PORT=5050
 DB_USER=postgres
 DB_PASS=canetinha*2023
 DB_NAME=apei-database-hml
-JWT_SECRET_PRD=19102024 
+JWT_SECRET_PRD=22 
 `
 
 `npm run typeorm migration:run`

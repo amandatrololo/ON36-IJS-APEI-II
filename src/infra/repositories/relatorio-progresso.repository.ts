@@ -11,27 +11,25 @@ export class RelatorioProgressoRepository implements RelatorioProgressoRepositor
     private readonly relatorioProgressoRepository: Repository<RelatorioProgresso>,
   ) {}
 
-  // Salvar relatório
+
   async salvar(relatorio: RelatorioProgresso): Promise<RelatorioProgresso> {
     return this.relatorioProgressoRepository.save(relatorio);
   }
 
-  // Buscar relatório por alunoId
-  async buscarPorAlunoId(alunoId: string): Promise<RelatorioProgresso[]> {
+  async buscarPorAlunoId(alunoId: number): Promise<RelatorioProgresso[]> {
     return this.relatorioProgressoRepository.find({ where: { aluno: { id: alunoId } } });
   }
 
-  // Buscar relatório por Id
+
   async buscarPorId(id: number): Promise<RelatorioProgresso | undefined> {
     return this.relatorioProgressoRepository.findOne({ where: { id } });
   }
 
-  // Exibir relatórios de um aluno
-  async exibirRelatoriosDoAluno(alunoId: string): Promise<RelatorioProgresso[]> {
+  async exibirRelatoriosDoAluno(alunoId: number): Promise<RelatorioProgresso[]> {
     return this.relatorioProgressoRepository.find({ where: { aluno: { id: alunoId } } });
   }
 
-  // Deletar relatório
+  
   async deletarRelatorio(id: number): Promise<void> {
     const relatorio = await this.buscarPorId(id);
     if (relatorio) {

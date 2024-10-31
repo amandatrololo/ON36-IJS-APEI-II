@@ -1,9 +1,11 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Usuario } from '../../domain/entities/usuario.entity';
 import { CriarUsuarioDto } from '../dtos/criar-usuario.dto';
 import { AtualizarUsuarioDto } from '../dtos/atualizar-usuario.dto';
+import * as bcrypt from 'bcrypt';
+import { UsuarioRepositoryPort } from '../../application/ports/usuario-repository.port';
 
 @Injectable()
 export class UsuarioService {
@@ -14,22 +16,36 @@ export class UsuarioService {
 
   // Cadastrar novo usuário (somente coordenador)
   async criarUsuario(criarUsuarioDto: CriarUsuarioDto): Promise<Usuario> {
-    const usuarioExistente = await this.usuarioRepository.findOne({ where: { email: criarUsuarioDto.email } });
-  
-    if (usuarioExistente) {
-      throw new NotFoundException('E-mail já cadastrado.');
-    }
-  
-    const usuario = this.usuarioRepository.create(criarUsuarioDto);
-    return await this.usuarioRepository.save(usuario);
+  const usuarioExistente = await this.usuarioRepository.findOne({ where: { email: criarUsuarioDto.email } });
+  if (usuarioExistente) {
+    throw new ConflictException('E-mail já cadastrado.'); // Correção: lança ConflictException
   }
+
+  // Criptografar a senha antes de salvar
+  const salt = await bcrypt.genSalt();
+  const hashedPassword = await bcrypt.hash(criarUsuarioDto.senha, salt);
+
+  const novoUsuario = this.usuarioRepository.create({
+    ...criarUsuarioDto,
+    senha: hashedPassword, // Armazena a senha criptografada
+  });
+
+  return await this.usuarioRepository.save(novoUsuario);
+}
 
   // Atualizar informações do usuário (somente coordenador)
   async atualizarUsuario(id: number, atualizarUsuarioDto: AtualizarUsuarioDto): Promise<Usuario> {
     const usuario = await this.usuarioRepository.findOne({ where: { id } });
-
+    
     if (!usuario) {
       throw new NotFoundException('Usuário não encontrado.');
+    }
+
+        // Se houver nova senha, criptografa antes de salvar
+    if (atualizarUsuarioDto.senha) {
+      const salt = await bcrypt.genSalt();
+      const hashedPassword = await bcrypt.hash(atualizarUsuarioDto.senha, salt);
+      atualizarUsuarioDto.senha = hashedPassword;
     }
 
     Object.assign(usuario, atualizarUsuarioDto); // Atualiza as propriedades do usuário
