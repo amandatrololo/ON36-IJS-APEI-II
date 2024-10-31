@@ -1,14 +1,14 @@
 import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from '././app.module';
+import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
-import { Logger } from '@nestjs/common';  // Para logs';
+import { ValidationPipe, Logger } from '@nestjs/common';
+import * as dotenv from 'dotenv';
 
-
+dotenv.config();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
-  
+
   // Habilita validação e transforma DTOs automaticamente
   app.useGlobalPipes(new ValidationPipe({
     transform: true,
@@ -16,11 +16,15 @@ async function bootstrap() {
     forbidNonWhitelisted: true,
   }));
 
+  // Logger configurado
+  app.useLogger(['log', 'error', 'warn', 'debug', 'verbose']);
+  
+  // Configuração do Swagger
   const config = new DocumentBuilder()
     .setTitle('APEI API')
     .setDescription('API para gerenciamento de alunos e relatórios')
     .setVersion('1.0')
-    .addBearerAuth({type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'access-token') 
+    .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'access-token')
     .addTag('login') // Suporte para autenticação JWT no Swagger
     .addTag('usuarios')
     .addTag('alunos')
@@ -30,12 +34,15 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('escolainclusao', app, document);
-  
+
+  // Escutar a aplicação
   const port = process.env.PORT || 3000;
   await app.listen(port);
-  app.useLogger(['log', 'error', 'warn', 'debug', 'verbose']);
+
+  // Mensagem de log após a inicialização
   const logger = new Logger('Bootstrap');
   logger.log(`Aplicação está rodando na: http://localhost:${port}`);
 }
 
+// Chama a função bootstrap para iniciar a aplicação
 bootstrap();

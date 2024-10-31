@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UsuarioService } from '../application/services/usuario.service'; 
 import { Usuario } from '../domain/entities/usuario.entity'; 
 import { FazLoginDto } from '@app/dtos/faz-login.dto';
-import * as bcrypt from 'bcrypt';
+import * as bcryptjs from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
@@ -19,8 +19,8 @@ export class AuthService {
   async validarUsuario(email: string, senha: string): Promise<Usuario | null> {
     const usuario = await this.usuarioService.buscarPorEmail(email);
     
-    // Verifica se o usuário existe e se a senha está correta (usando bcrypt)
-    if (usuario && await bcrypt.compare(senha, usuario.senha)) { 
+    // Verifica se o usuário existe e se a senha está correta (usando bcryptjs)
+    if (usuario && await bcryptjs.compare(senha, usuario.senha)) { 
       return usuario;
     }
     return null;

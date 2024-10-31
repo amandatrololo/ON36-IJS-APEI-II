@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { Usuario } from '../../domain/entities/usuario.entity';
 import { CriarUsuarioDto } from '../dtos/criar-usuario.dto';
 import { AtualizarUsuarioDto } from '../dtos/atualizar-usuario.dto';
-import * as bcrypt from 'bcrypt';
+import * as bcryptjs from 'bcryptjs';
 import { UsuarioRepositoryPort } from '../../application/ports/usuario-repository.port';
 
 @Injectable()
@@ -22,8 +22,8 @@ export class UsuarioService {
   }
 
   // Criptografar a senha antes de salvar
-  const salt = await bcrypt.genSalt();
-  const hashedPassword = await bcrypt.hash(criarUsuarioDto.senha, salt);
+  const salt = await bcryptjs.genSalt();
+  const hashedPassword = await bcryptjs.hash(criarUsuarioDto.senha, salt);
 
   const novoUsuario = this.usuarioRepository.create({
     ...criarUsuarioDto,
@@ -43,8 +43,8 @@ export class UsuarioService {
 
         // Se houver nova senha, criptografa antes de salvar
     if (atualizarUsuarioDto.senha) {
-      const salt = await bcrypt.genSalt();
-      const hashedPassword = await bcrypt.hash(atualizarUsuarioDto.senha, salt);
+      const salt = await bcryptjs.genSalt();
+      const hashedPassword = await bcryptjs.hash(atualizarUsuarioDto.senha, salt);
       atualizarUsuarioDto.senha = hashedPassword;
     }
 

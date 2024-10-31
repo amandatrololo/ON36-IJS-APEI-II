@@ -1,19 +1,4 @@
 {
-  "compilerOptions": {
-    "target": "ES2021",
-    "module": "commonjs",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",
-    "rootDir": "./src"
-  },
-  "files": [
-    "src/**/*.ts"
-  ],
   "name": "on36-ijs-apei-ii",
   "version": "1.0.0",
   "description": "",
@@ -30,7 +15,7 @@
     "@nestjs/typeorm": "^10.0.2",
     "@typeschema/class-validator": "^0.3.0",
     "ajv": "^6.12.6",
-    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "dotenv": "^16.4.5",
@@ -50,15 +35,17 @@
     "@types/passport-jwt": "^4.0.1",
     "typescript": "^5.6.3"
   },
-  "scripts": {
-    "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
-    "migration:create": "npm run typeorm -- migration:create ./src/db/migrations/$npm_config_name",
-    "migration:run": "npm run typeorm migration:run -- -d ./data-source.ts",
-    "migration:revert": "npm run typeorm migration:revert -- -d ./data-source.ts",
-    "start": "nest start",
-    "start:prod": "nest start --prod",
-    "build": "nest build"
-  },
+ "scripts": {
+  "typeorm": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js",
+  "migration:create": "npm run typeorm -- migration:create ./src/migrations/$npm_config_name",
+  "migration:generate": "npm run typeorm migration:generate -- -d ./dist/data-source.js",
+  "migration:run": "npm run typeorm migration:run -- -d ./dist/data-source.js",
+  "migration:revert": "npm run typeorm migration:revert -- -d ./src/data-source.ts",
+  "prestart:prod": "npm run build && npm run migration:run",
+  "start": "nest start",
+  "start:prod": "nest start --prod",
+  "build": "nest build"
+},
   "keywords": [],
   "author": "",
   "license": "ISC"

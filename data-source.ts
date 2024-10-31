@@ -1,12 +1,7 @@
-// data-source.ts
 import { DataSource } from 'typeorm';
-import { Usuario } from './src/domain/entities/usuario.entity';
-import { Aluno } from './src/domain/entities/aluno.entity';
-import { RelatorioProgresso } from './src/domain/entities/relatorio-progresso.entity';
-import { RelatorioProfissional } from './src/domain/entities/relatorio-profissional.entity';
-import * as dotenv from 'dotenv';
+import {config} from 'dotenv';
 
-dotenv.config();
+config();
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -15,8 +10,14 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  entities: ['./dist/**/*.entity.js'],
-  migrations: ['./dist/migrations/*.js'],
+  entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+  migrations: [__dirname + '/../migrations/*{.ts,.js}'],
   synchronize: false,
-  migrationsRun: false,
+});
+AppDataSource.initialize()
+.then(() => {
+  console.log("Data Source has been initialized!")
+})
+.catch((err) => {
+  console.error("Error during Data Source initialization", err)
 });

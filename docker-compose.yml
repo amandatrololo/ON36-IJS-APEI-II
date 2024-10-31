@@ -3,18 +3,24 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        NODE_ENV: production
-    environment:
-      NODE_ENV: production
-      DB_HOST: 3.15.162.194
-      DB_PORT: 5432
-      DB_USER: apei_user
-      DB_PASSWORD: escolainclusao
-      DB_DATABASE: apei_database-prd
-      JWT_SECRET_HML: c00rd3n4c40secr3t43sc0l4
-      PORT: 3000
+    env_file: .env.prd  # Carrega as variáveis de ambiente a partir do arquivo .env.prd
     ports:
       - "3000:3000"
     volumes:
       - .:/app
+    depends_on:
+      - db
+
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: apei_database_prd
+      POSTGRES_USER: apei_user
+      POSTGRES_PASSWORD: escolainclusao
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
